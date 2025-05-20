@@ -106,7 +106,8 @@ def update_data(state):
 # ----------------------------------------------------------------------------------------------------------------------
 
 current_dir = Path.cwd()
-data_path = current_dir.parents[1] / 'ASC-606' /'Source_Data'
+# data_path = current_dir.parents[1] / 'ASC-606' /'Source_Data'
+data_path = current_dir.parents[1] / 'Source_Data'
 datafile = os.path.join(data_path, "ai_hub_output.csv" )
 df = pd.read_csv(datafile)
 df = df.astype("object")
