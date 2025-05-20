@@ -1,0 +1,32 @@
+.data_buttons {
+    align-items: center;
+    text-align: center;
+}
+
+.buttons {
+    align-items: center;
+    text-align: center;
+    border-top: 0cap;
+    border-left: 0cap;
+    border-right: 0cap;
+    border-bottom: 1px;
+    width: 100%;
+}
+
+.filter_panel {
+    height: 100%;
+}
+
+tr:first-child {
+    border-top: 2px solid black;
+}
+
+/* Ensure only the first row gets the full border effect */
+tr:first-child td {
+    border-top: 2px solid black;
+}
+
+/* Optional: Remove borders from other rows */
+tr:not(:first-child) td {
+    border: none;
+}
