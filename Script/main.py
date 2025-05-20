@@ -107,9 +107,7 @@ def update_data(state):
 
 current_dir = Path.cwd()
 # data_path = current_dir.parents[1] / 'ASC-606' /'Source_Data'
-# data_path = current_dir.parents[1] / 'Source_Data'
 data_path = Path("Source_Data")
-# print(f"Data Path: {data_path}")
 datafile = os.path.join(data_path, "ai_hub_output.csv" )
 df = pd.read_csv(datafile)
 df = df.astype("object")
@@ -157,37 +155,37 @@ def filter_panel():
             tgb.selector(value="{selected_company}", lov=company_list, dropdown=True, label="Select Company", on_change=update_data)
             tgb.html('br')
         with tgb.part():
-            tgb.text("Contract Term")
+            tgb.text("**Contract Term**", mode='md')
             tgb.text("{ctr_term}")
             tgb.html('br')
         with tgb.part():
-            tgb.text("Total Contract Value")
+            tgb.text("**Total Contract Value**", mode='md')
             tgb.text("{tot_ctr_val}")
             tgb.html('br')
         with tgb.part():
-            tgb.text("Contract Creation Date")
+            tgb.text("**Contract Creation Date**", mode='md')
             tgb.text("{ctr_cre_dt}")
             tgb.html('br')
         with tgb.part():
             with tgb.layout("1 1"):
-                tgb.text("Contract Effective Date")
-                tgb.text("Contract Signing Date")
+                tgb.text("**Contract Effective Date**", mode='md')
+                tgb.text("**Contract Signing Date**", mode='md')
                 tgb.text("{ctr_eff_dt}")
                 tgb.text("{ctr_sign_dt}")
             tgb.html('br')
         with tgb.part():
             with tgb.layout("1 1"):
-                tgb.text("Revenue Start Date")
-                tgb.text("Revenue End Date")
+                tgb.text("**Revenue Start Date**", mode='md')
+                tgb.text("**Revenue End Date**", mode='md')
                 tgb.text("{rev_str_dt}")
                 tgb.text("{rev_end_dt}")
             tgb.html('br')
         with tgb.part():
-            tgb.text("Allocated Transaction Price")
+            tgb.text("**Allocated Transaction Price**", mode='md')
             tgb.text("{all_tra_prc}")
             tgb.html('br')
         with tgb.part():
-            tgb.text("Billing Frequency and Amount")
+            tgb.text("**Billing Frequency and Amount**", mode='md')
             tgb.text("{bill_freq}")
             tgb.html('br')
 
@@ -216,16 +214,17 @@ with tgb.Page() as data_page:
                         tgb.table("{display_df}", rebuild=True)    
                     tgb.html("br")   
                     
-                    with tgb.layout("1 1 1"):
-                        with tgb.part("card"):
-                            tgb.text("Standalone Selling Price")
-                            tgb.text("{sta_sell_price}")
-                        with tgb.part("card"):
-                            tgb.text("Contract Modifications")
-                            tgb.text("{ctr_mods}")
-                        with tgb.part("card"):
-                            tgb.text("Renewal Details")
-                            tgb.text("{ren_det}")
+                    with tgb.part("card"):
+                        tgb.text("**Standalone Selling Price**", mode='md')
+                        tgb.text("{sta_sell_price}")
+                    tgb.html("br") 
+                    with tgb.part("card"):
+                        tgb.text("**Contract Modifications**", mode='md')
+                        tgb.text("{ctr_mods}")
+                    tgb.html("br") 
+                    with tgb.part("card"):
+                        tgb.text("**Renewal Details**", mode='md')
+                        tgb.text("{ren_det}")
                     
                         
 pages = {
