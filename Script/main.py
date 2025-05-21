@@ -44,6 +44,27 @@ def format_currency(value):
         return f"${num:,.2f}"
     except:
         return "NA"
+
+def format_contract_term(term):
+    if not isinstance(term, str):
+        return "NA"
+
+    term = term.lower()
+
+    # Try to extract a number (either digit or word)
+    digit_match = re.search(r"(\d+)", term)
+
+    number = int(digit_match.group(1))
+
+    # Determine unit (month/year)
+    if "month" in term:
+        unit = "Months"
+    elif "year" in term:
+        unit = "Years"
+    else:
+        unit = "Units"
+
+    return f"{number} {unit}" if number else "NA"
     
 def show_column_as_table(state, column_name):
     tables = []
@@ -76,7 +97,7 @@ def update_data(state):
     
     row = df[df["Customer_Name"] == state.selected_company].iloc[0]
     
-    state.ctr_term = row["Contract_Term"]
+    state.ctr_term = format_contract_term(row["Contract_Term"])
     state.tot_ctr_val = format_currency(row["Total_Contract_Value"])
     state.ctr_cre_dt = format_date(row["Contract_Creation_Date"])
     state.rev_str_dt = format_date(row["Revenue_Start_Date"])
@@ -120,7 +141,7 @@ filtered_df = get_filtered_data(selected_company)
 
 display_df = parse_json_column(filtered_df["Products_and_Services"].iloc[0])
 
-ctr_term = df[df["Customer_Name"] == selected_company]["Contract_Term"].iloc[0]
+ctr_term = format_contract_term(df[df["Customer_Name"] == selected_company]["Contract_Term"].iloc[0])
 tot_ctr_val = format_currency(df[df["Customer_Name"] == selected_company]["Total_Contract_Value"].iloc[0])
 ctr_cre_dt = format_date(df[df["Customer_Name"] == selected_company]["Contract_Creation_Date"].iloc[0])
 rev_str_dt = format_date(df[df["Customer_Name"] == selected_company]["Revenue_Start_Date"].iloc[0])
@@ -225,8 +246,7 @@ with tgb.Page() as data_page:
                     with tgb.part("card"):
                         tgb.text("**Renewal Details**", mode='md')
                         tgb.text("{ren_det}")
-                    
-                        
+                                          
 pages = {
         "Data": data_page,
     }
