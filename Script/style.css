@@ -70,7 +70,7 @@ img{
 }
 
 .logo2{
-    width: 75% !important;
-    height: 3vw !important;      /* Relative to viewport width */
+    width: 100% !important;
+    height: 3.5vw !important;      /* Relative to viewport width */
     /* max-height: 60px; */
 }

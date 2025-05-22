@@ -66,12 +66,18 @@ def clean_asterisks(text):
     if isinstance(text, str):
         return re.sub(r"\*\*", "", text)
     return text
+
+def clean_markdown_blocks(text):
+    if isinstance(text, str):
+        return re.sub(r"```(?:json|python)?\s*|\s*```", "", text, flags=re.IGNORECASE)
+    return text
     
 def set_button_classes(state, active_button):
     base = "buttons"
     btns = [
         "products_class", "license_class", "performance_class", "variable_class",
-        "payment_class", "std_sell_price", "contract_mod", "renewal_details"
+        "payment_class", "std_sell_price", "contract_mod", "renewal_details", 
+        "revenue_waterfall"
     ]
     for btn in btns:
         setattr(state, btn, f"{base} active" if btn == active_button else base)
@@ -92,34 +98,47 @@ def show_single_value(state, label, value):
 def show_products_service(state):
     set_button_classes(state, "products_class")
     show_column_as_table(state, "Products_and_Services")
+    state.last_button_clicked = "show_products_service"
 
 def show_license_details(state):
     set_button_classes(state, "license_class")
     show_column_as_table(state, "Type_of_License")
+    state.last_button_clicked = "show_license_details"
 
 def show_performance_obligations(state):
     set_button_classes(state, "performance_class")
     show_column_as_table(state, "Performance_Obligations")
+    state.last_button_clicked = "show_performance_obligations"
 
 def show_variable_considerations(state):
     set_button_classes(state, "variable_class")
     show_column_as_table(state, "Variable_Consideration")
+    state.last_button_clicked = "show_variable_considerations"
 
 def show_payment_schedules(state):
     set_button_classes(state, "payment_class")
     show_column_as_table(state, "Payment_Schedules")
+    state.last_button_clicked = "show_payment_schedules"
 
 def show_standalone_price(state):
     set_button_classes(state, "std_sell_price")
     show_single_value(state, "Standalone Selling Price", state.sta_sell_price)
+    state.last_button_clicked = "show_standalone_price"
 
 def show_contract_modifications(state):
     set_button_classes(state, "contract_mod")
     show_single_value(state, "Contract Modifications", state.ctr_mods)
+    state.last_button_clicked = "show_contract_modifications"
 
 def show_renewal_details(state):
     set_button_classes(state, "renewal_details")
     show_single_value(state, "Renewal Details", state.ren_det)
+    state.last_button_clicked = "show_renewal_details"
+
+def show_revenue_waterfall(state):
+    set_button_classes(state, "revenue_waterfall")
+    show_single_value(state, "Revenue Waterfall", "Coming Soon!!!")
+    state.last_button_clicked = "show_revenue_waterfall"
 
 # ------------------------ State Update Function ----------------------
     
@@ -151,7 +170,12 @@ def update_data(state):
         state.ctr_eff_dt = f"Error: {e}"
         state.ctr_sign_dt = f"Error: {e}"
     
-    show_products_service(state)
+    if not hasattr(state, "last_button_clicked") or not state.last_button_clicked:
+        state.last_button_clicked = "show_products_service"
+        
+    globals()[state.last_button_clicked](state)
+    
+    #show_products_service(state)
 
 # ------------------------ Data Initialization ----------------------
 
@@ -163,10 +187,13 @@ df = pd.read_csv(datafile)
 df = df.astype("object")
 df.fillna("NA", inplace=True)
 
+df = df.map(clean_markdown_blocks)
+
 # logo_path = current_dir.parents[1] / 'ASC-606' /'Logos'
 logo_path = Path("Logos")
 logo_1 = os.path.join(logo_path, "HighIQ_Logo.jpg" )
-logo_2 = os.path.join(logo_path, "InstaBase_Logo.jpg" )
+# logo_2 = os.path.join(logo_path, "InstaBase_Logo.jpg" )
+logo_2 = os.path.join(logo_path, "ASC_606_Logo.png" )
 
 company_list = sorted(df["Customer_Name"].dropna().unique())
 selected_company = company_list[0]
@@ -210,6 +237,9 @@ payment_class = "buttons"
 std_sell_price = "buttons"
 contract_mod = "buttons"
 renewal_details = "buttons"
+revenue_waterfall = "buttons"
+
+last_button_clicked = "show_products_service"
 
 # ------------------------ UI Definitions ----------------------
 
@@ -271,7 +301,7 @@ with tgb.Page() as data_page:
                 with tgb.part("card"):
                     filter_panel()
                 with tgb.part('card'):
-                    with tgb.layout("1 1 1 1 1 1 1 1"):
+                    with tgb.layout("1 1 1 1 1 1 1 1 1"):
                         with tgb.part(class_name="data_buttons"):
                             tgb.button("Product and Services", 
                             on_action=show_products_service, 
@@ -304,6 +334,10 @@ with tgb.Page() as data_page:
                             tgb.button("Renewal Details", 
                             on_action=show_renewal_details, 
                             class_name="{renewal_details}") 
+                        with tgb.part():
+                            tgb.button("Revenue Waterfall", 
+                            on_action=show_revenue_waterfall, 
+                            class_name="{revenue_waterfall}")
                     tgb.html("br")
                     
                     with tgb.part():
