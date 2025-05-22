@@ -4,6 +4,7 @@
 }
 
 .buttons {
+    background-color: white;
     align-items: center;
     text-align: center;
     border-top: 0cap;
@@ -11,6 +12,9 @@
     border-right: 0cap;
     border-bottom: 1px;
     width: 100%;
+    font-size: 12px;
+    height: 60px;
+    font-weight: bold;
 }
 
 .filter_panel {
@@ -29,4 +33,44 @@ tr:first-child td {
 /* Optional: Remove borders from other rows */
 tr:not(:first-child) td {
     border: none;
+}
+
+.buttons:hover {
+    background-color: #e0e0e0;
+    color: black
+}
+
+.buttons.active {
+    background-color: orangered; /* Blue background */
+    color: white;
+    font-weight: bold;
+    align-items: center;
+    text-align: center;
+    border-top: 0cap;
+    border-left: 0cap;
+    border-right: 0cap;
+    border-bottom: 1px;
+    width: 100%;
+    font-size: 12px;
+    font-weight: bold;
+    height: 60px;
+}
+
+img{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    object-fit: contain;
+}
+
+.logo1{    
+    width: 100% !important;
+    height: 4vw !important;      /* Relative to viewport width */
+    /* max-height: 60px; */    
+}
+
+.logo2{
+    width: 75% !important;
+    height: 3vw !important;      /* Relative to viewport width */
+    /* max-height: 60px; */
 }
